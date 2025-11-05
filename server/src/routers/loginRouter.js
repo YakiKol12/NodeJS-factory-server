@@ -1,9 +1,8 @@
 const express = require('express');
-const axios = require('axios');
+const loginService = require('../services/loginService');
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
-const USER_URL = 'https://jsonplaceholder.typicode.com/users';
 
 //Entry point for login: http://localhost:3000/login
 router.post('/', async (req, res) => {
@@ -14,21 +13,10 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const response = await axios.get(`${USER_URL}?name=${username}&email=${email}`);
-        const users = response.data;
-
-        if (users.length === 0) {
+        const token = await loginService.login(username, email);
+        if (!token) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        const user = users[0];
-
-        // User found, generate JWT
-        const token = jwt.sign(
-            { id: user.id },
-            process.env.JWT_SECRET,
-            { expiresIn: process.env.JWT_EXPIRES_IN }
-        );
-
         res.json({ token });
     } catch (error) {
         console.error('Error during login:', error);
