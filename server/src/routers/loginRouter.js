@@ -13,11 +13,11 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const token = await loginService.login(username, email);
-        if (!token) {
+        const user = await loginService.login(username, email);
+        if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        res.json({ token });
+        res.json({ user: user.dbUser, token: user.token });
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ message: 'Internal server error' });

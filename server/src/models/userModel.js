@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
     fullName: { type: String, required: true},
-    numOfActions: { type: Number, default: 0 },
+    username: { type: String, required: true, unique: true },
+    numOfActions: { type: Number, default: 10 },
+    lastActionDate: { type: Date, default: null },
 }, 
 { 
     versionKey: false 
