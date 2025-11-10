@@ -12,7 +12,10 @@ const verifyToken = (req, res, next) => {
         req.user = decoded.dbUser;
         next();
     } catch (err) {
-        res.status(401).json({ message: 'Invalid or expired token' });
+        console.error('JWT verify error:', err.name, err.message);
+        if (err.name === 'TokenExpiredError') 
+            return res.status(401).json({ message: 'Token expired' });
+        return res.status(401).json({ message: 'Invalid token' });
     }
 };
 
