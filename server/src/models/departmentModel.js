@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-    name: { type: String, required: true },
-    manager: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
+    name: { type: String, required: true, unique: true },
+    manager: { type: mongoose.Schema.Types.ObjectId, ref: 'employee' },
 }, 
 { 
     versionKey: false 
