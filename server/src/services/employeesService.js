@@ -1,4 +1,4 @@
-const employeesRepo = require('../repositories/employeesRepo');
+const employeesRepo = require('../repositories/employeeRepo');
 
 const getAllEmployees = async () => {
     return await employeesRepo.getAllEmployees();

@@ -1,24 +1,44 @@
 const Department = require('../models/departmentModel');
 
 const getAllDepartments = async () => {
-    return await Department.find();
+    try {
+        return await Department.find();
+    } catch (error) {
+        throw new Error('Error getting all departments: ' + error.message);
+    }
 };
 
 const getDepartmentById = async (id) => {
-    return await Department.findById(id);
+    try {
+        return await Department.findById(id);
+    } catch (error) {
+        throw new Error('Error getting department by ID: ' + error.message);
+    }
 };
 
 const createDepartment = async (departmentData) => {
-    const department = new Department(departmentData);
-    return await department.save();
+    try {
+        const department = new Department(departmentData);
+        return await department.save();
+    } catch (error) {
+        throw new Error('Error creating department: ' + error.message);
+    }
 };
 
 const updateDepartment = async (id, departmentData) => {
-    return await Department.findByIdAndUpdate(id, departmentData, { new: true });
+    try {
+        return await Department.findByIdAndUpdate(id, departmentData, { new: true });
+    } catch (error) {
+        throw new Error('Error updating department: ' + error.message);
+    }
 };
 
 const deleteDepartment = async (id) => {
-    return await Department.findByIdAndDelete(id);
+    try {
+        return await Department.findByIdAndDelete(id);
+    } catch (error) {
+        throw new Error('Error deleting department: ' + error.message);
+    }
 };
 
 module.exports = {
