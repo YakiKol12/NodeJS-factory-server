@@ -52,6 +52,9 @@ router.put('/:id', authMiddleware.verifyToken, async (req, res) => {
 router.patch('/:id/manager', authMiddleware.verifyToken, async (req, res) => {
     try {
         const updatedDepartment = await departmentsService.updateDepartmentsManager(req.body.managerId, req.params.id);
+        if (!updatedDepartment) {
+            return res.status(404).json({ message: 'Department not found' });
+        }
         res.status(200).json(updatedDepartment);
     } catch (error) {
         res.status(500).json({ message: error.message });

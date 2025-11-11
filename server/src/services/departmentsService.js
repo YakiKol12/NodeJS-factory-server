@@ -23,11 +23,12 @@ const updateDepartment = async (id, departmentData) => {
 
 const updateDepartmentsManager = async (managerId, departmentId) => {
     const department = await departmentsRepo.getDepartmentById(departmentId);
-    if (department) {
-        department.managerId = managerId;
-        return await departmentsRepo.updateDepartment(departmentId, department);
+    if (!department) {
+        return null;
     }
-    return null;
+    department.manager = managerId;
+    await departmentsRepo.updateDepartment(departmentId, department);
+    return department;
 };
 
 const deleteDepartment = async (id) => {
