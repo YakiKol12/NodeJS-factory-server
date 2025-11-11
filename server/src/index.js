@@ -6,6 +6,7 @@ const connectDB = require('./configs/db');
 const loginRouter = require('./routers/loginRouter');
 const userRouter = require('./routers/usersRouter');
 const departmentsRouter = require('./routers/departmentsRouter');
+const employeesRouter = require('./routers/employeesRouter');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/departments', departmentsRouter);
+app.use('/employees', employeesRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
