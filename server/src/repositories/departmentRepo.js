@@ -2,7 +2,7 @@ const Department = require('../models/departmentModel');
 
 const getAllDepartments = async () => {
     try {
-        return await Department.find();
+        return await Department.find().lean();
     } catch (error) {
         throw new Error('Error getting all departments: ' + error.message);
     }
@@ -10,7 +10,7 @@ const getAllDepartments = async () => {
 
 const getDepartmentById = async (id) => {
     try {
-        return await Department.findById(id);
+        return await Department.findById(id).lean();
     } catch (error) {
         throw new Error('Error getting department by ID: ' + error.message);
     }

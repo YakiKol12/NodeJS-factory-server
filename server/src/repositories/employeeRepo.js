@@ -2,7 +2,7 @@ const employee = require('../models/employeeModel');
 
 const getAllEmployees = async () => {
     try {
-        return await employee.find();
+        return await employee.find().lean();
     } catch (error) {
         throw new Error('Error getting all employees: ' + error.message);
     }
@@ -10,7 +10,7 @@ const getAllEmployees = async () => {
 
 const getEmployeeById = async (id) => {
     try {
-        return await employee.findById(id);
+        return await employee.findById(id).lean();
     } catch (error) {
         throw new Error('Error getting employee by ID: ' + error.message);
     }
@@ -35,7 +35,7 @@ const updateEmployee = async (id, employeeData) => {
 
 const deleteEmployee = async (id) => {
     try {
-        return await employee.findByIdAndDelete(id);
+        return await employee.findByIdAndDelete(id).lean();
     } catch (error) {
         throw new Error('Error deleting employee: ' + error.message);
     }

@@ -63,7 +63,7 @@ router.patch('/:id/hours', authMiddleware.verifyToken, async (req, res) => {
 router.patch('/:id/employees', authMiddleware.verifyToken, async (req, res) => {
     try {
         const { employeeIds } = req.body;
-        const updatedShift = await shiftsService.addEmployeeToShift(req.params.id, employeeIds);
+        const updatedShift = await shiftsService.addEmployeesToShift(req.params.id, employeeIds);
         res.status(200).json(updatedShift);
     } catch (error) {
         res.status(500).json({ message: error.message });

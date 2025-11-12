@@ -11,7 +11,7 @@ const getShiftById = async (id) => {
 const getShiftsByEmployeeId = async (employeeId) => {
     const shifts = await shiftRepo.getAllShifts();
     return shifts.filter(shift => 
-        shift.employees.some(emp => emp.toString() === employeeId)
+        shift.employees.some(emp => emp._id.toString() === employeeId)
     );
 };
 
@@ -55,7 +55,7 @@ const addEmployeesToShift = async (shiftId, employeeIds) => {
 
     for (const employeeId of employeeIds) {
         // check if employee is already in shift
-        if (shift.employees.some(empId => empId.toString() === employeeId)) {
+        if (shift.employees.some(emp => emp._id.toString() === employeeId)) {
             throw new Error(`Employee ${employeeId} is already assigned to this shift`);
         };
     }
@@ -64,7 +64,7 @@ const addEmployeesToShift = async (shiftId, employeeIds) => {
     for (const employeeId of employeeIds) {
         const employeeShifts = await getShiftsByEmployeeId(employeeId);
         for (const empShift of employeeShifts) {
-            if (empShift.date === shift.date) {
+            if (empShift.date.getMonth() === shift.date.getMonth() && empShift.date.getDay() === shift.date.getDay()) {
                 throw new Error(`Employee ${employeeId} already has a shift on ${shift.date}`);
             }
         }
@@ -79,7 +79,7 @@ const removeEmployeeFromShift = async (shiftId, employeeId) => {
     if (!shift) {
         throw new Error('Shift not found');
     };
-    shift.employees = shift.employees.filter(empId => empId.toString() !== employeeId);
+    shift.employees = shift.employees.filter(emp => emp._id.toString() !== employeeId);
     return await updateShift(shiftId, shift);
 };
 
@@ -91,6 +91,6 @@ module.exports = {
     createShift,
     updateShift,
     changeShiftHours,
-    addEmployeeToShift,
+    addEmployeesToShift,
     removeEmployeeFromShift
 };
