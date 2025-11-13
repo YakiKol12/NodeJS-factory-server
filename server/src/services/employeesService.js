@@ -1,4 +1,5 @@
 const employeesRepo = require('../repositories/employeeRepo');
+const shiftsService = require('./shiftsService');
 
 const getAllEmployees = async () => {
     return await employeesRepo.getAllEmployees();
@@ -35,6 +36,7 @@ const updateEmployeeDepartment = async (id, departmentID) => {
 }
 
 const deleteEmployee = async (id) => {
+    await shiftsService.removeEmployeeFromAllShifts(id);
     return await employeesRepo.deleteEmployee(id);
 };
 
