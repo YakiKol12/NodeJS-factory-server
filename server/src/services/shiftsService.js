@@ -83,6 +83,15 @@ const removeEmployeeFromShift = async (shiftId, employeeId) => {
     return await updateShift(shiftId, shift);
 };
 
+const removeEmployeeFromAllShifts = async (employeeId) => {
+    const shifts = await getAllShifts();
+    for (const shift of shifts) {
+        if (shift.employees.some(emp => emp._id.toString() === employeeId)) {
+            shift.employees = shift.employees.filter(emp => emp._id.toString() !== employeeId);
+            await updateShift(shift._id, shift);
+        }
+    }
+};
 
 module.exports = {
     getAllShifts,
@@ -92,5 +101,6 @@ module.exports = {
     updateShift,
     changeShiftHours,
     addEmployeesToShift,
-    removeEmployeeFromShift
+    removeEmployeeFromShift,
+    removeEmployeeFromAllShifts
 };
