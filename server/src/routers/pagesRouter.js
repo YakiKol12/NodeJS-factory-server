@@ -23,4 +23,13 @@ router.get('/employees/:departmentID', authMiddleware.verifyToken, async (req, r
     }
 });
 
+router.get('/departments', authMiddleware.verifyToken, async (req, res) => {
+    try {
+        const departmentsData = await pagesService.getAllDepartmentsData();
+        res.json(departmentsData);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;

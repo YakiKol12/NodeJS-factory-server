@@ -26,6 +26,29 @@ const getAllEmployeesData = async () => {
     return employeesWithDetails;
 };
 
+const getAllDepartmentsData = async () => {
+    const departments = await departmentsService.getAllDepartments();
+    const employees = await employeesService.getAllEmployees();    
+
+    const departmentsWithEmployees = await Promise.all(departments.map(async dept => {
+        const deptEmployees = employees.filter(emp => emp.departmentID && emp.departmentID.toString() === dept._id.toString())
+            .filter(emp => emp._id.toString() !== dept.manager.toString())
+            .map(emp => ({fullName: `${emp.firstName} ${emp.lastName}`}));
+            
+        const manager = employees.find(emp => emp._id.toString() === dept.manager.toString());     
+
+        return {
+            deptName: dept.name,
+            manager: manager ? `${manager.firstName} ${manager.lastName}` : null,
+            employees: deptEmployees
+        };
+    }));
+
+    console.log(departmentsWithEmployees);
+    
+    return departmentsWithEmployees;
+};
+        
 const getAllEmployeesByDepartment = async (departmentId) => {
     const allEmployees = await getAllEmployeesData();
     const department = await departmentsService.getDepartmentById(departmentId);    
@@ -37,5 +60,6 @@ const getAllEmployeesByDepartment = async (departmentId) => {
 
 module.exports = {
     getAllEmployeesData,
+    getAllDepartmentsData,
     getAllEmployeesByDepartment
 };
