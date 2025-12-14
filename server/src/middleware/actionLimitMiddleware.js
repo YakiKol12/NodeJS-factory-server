@@ -1,4 +1,5 @@
 const userDBRepo = require('../repositories/userDbRepo');
+const { actionsLoggingMiddleware } = require('./actionsLoggingMiddleware');
 
 const checkActionLimit = async (req, res, next) => {
     try {
@@ -10,6 +11,9 @@ const checkActionLimit = async (req, res, next) => {
 
         if (user.remainingActions > 0) {
             await userDBRepo.decrementRemainingActions(username);
+            user = await userDBRepo.getUserByUsername(username);
+            req.user.remainingActions = user.remainingActions;
+            await actionsLoggingMiddleware(req, res, () => {});
             next();
         } else {
             return res.status(403).json({ message: 'Daily action limit reached. You are logged off for the day.' });
