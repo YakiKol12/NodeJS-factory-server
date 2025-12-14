@@ -4,7 +4,8 @@ const schema = new mongoose.Schema({
     fullName: { type: String, required: true},
     username: { type: String, required: true, unique: true },
     numOfActions: { type: Number, default: 10 },
-    lastActionDate: { type: Date, default: null },
+    remainingActions: { type: Number, default: 10 },
+    lastResetDate: { type: Date, default: Date.now },
 }, 
 { 
     versionKey: false 

@@ -16,7 +16,6 @@ const getAllEmployeesData = async () => {
         }));
 
         return {
-            // ...emp,
             fullName: `${emp.firstName} ${emp.lastName}`,
             department: department ? department.name : null,
             shifts: shiftsList
@@ -43,8 +42,6 @@ const getAllDepartmentsData = async () => {
             employees: deptEmployees
         };
     }));
-
-    console.log(departmentsWithEmployees);
     
     return departmentsWithEmployees;
 };

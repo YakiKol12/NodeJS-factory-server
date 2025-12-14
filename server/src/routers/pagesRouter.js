@@ -1,10 +1,11 @@
 const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
+const actionLimitMiddleware = require('../middleware/actionLimitMiddleware');
 const pagesService = require('../services/pagesService');
 
 const router = express.Router();
 
-router.get('/employees', authMiddleware.verifyToken, async (req, res) => {
+router.get('/employees', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const employeesData = await pagesService.getAllEmployeesData();
         res.json(employeesData);
@@ -13,7 +14,7 @@ router.get('/employees', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.get('/employees/:departmentID', authMiddleware.verifyToken, async (req, res) => {
+router.get('/employees/:departmentID', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const departmentID = req.params.departmentID;
         const employeesData = await pagesService.getAllEmployeesByDepartment(departmentID);
@@ -23,7 +24,7 @@ router.get('/employees/:departmentID', authMiddleware.verifyToken, async (req, r
     }
 });
 
-router.get('/departments', authMiddleware.verifyToken, async (req, res) => {
+router.get('/departments', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const departmentsData = await pagesService.getAllDepartmentsData();
         res.json(departmentsData);

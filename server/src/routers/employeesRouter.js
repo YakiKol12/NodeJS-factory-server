@@ -1,10 +1,11 @@
 const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
+const actionLimitMiddleware = require('../middleware/actionLimitMiddleware');
 const employeesService = require('../services/employeesService');
 
 const router = express.Router();
 
-router.get('/', authMiddleware.verifyToken, async (req, res) => {
+router.get('/', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const employees = await employeesService.getAllEmployees();
         res.json(employees);
@@ -13,7 +14,7 @@ router.get('/', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.get('/:id', authMiddleware.verifyToken, async (req, res) => {
+router.get('/:id', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const employee = await employeesService.getEmployeeById(req.params.id);
         if(employee == null) {
@@ -25,7 +26,7 @@ router.get('/:id', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.get('/name/:firstName/:lastName', authMiddleware.verifyToken, async (req, res) => {
+router.get('/name/:firstName/:lastName', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const employee = await employeesService.getEmployeeByName(req.params.firstName, req.params.lastName);
         if(employee == null) {
@@ -37,7 +38,7 @@ router.get('/name/:firstName/:lastName', authMiddleware.verifyToken, async (req,
     }
 });
 
-router.get('/department/:departmentID', authMiddleware.verifyToken, async (req, res) => {
+router.get('/department/:departmentID', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const employees = await employeesService.getEmployeesByDepartment(req.params.departmentID);
         if(employees == null || employees.length === 0) {
@@ -49,7 +50,7 @@ router.get('/department/:departmentID', authMiddleware.verifyToken, async (req, 
     }
 });
 
-router.post('/', authMiddleware.verifyToken, async (req, res) => {
+router.post('/', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const newEmployee = await employeesService.createEmployee(req.body);
         res.status(201).json(newEmployee);
@@ -58,7 +59,7 @@ router.post('/', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.put('/:id', authMiddleware.verifyToken, async (req, res) => {
+router.put('/:id', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const updatedEmployee = await employeesService.updateEmployee(req.params.id, req.body);
         res.json(updatedEmployee);
@@ -67,7 +68,7 @@ router.put('/:id', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.patch('/:id/department', authMiddleware.verifyToken, async (req, res) => {
+router.patch('/:id/department', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const updatedEmployee = await employeesService.updateEmployeeDepartment(req.params.id, req.body.departmentID);
         res.json(updatedEmployee);
@@ -76,7 +77,7 @@ router.patch('/:id/department', authMiddleware.verifyToken, async (req, res) => 
     }
 });
 
-router.delete('/:id', authMiddleware.verifyToken, async (req, res) => {
+router.delete('/:id', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         await employeesService.deleteEmployee(req.params.id);
         res.status(204).end();

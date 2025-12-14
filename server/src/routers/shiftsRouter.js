@@ -1,10 +1,11 @@
 const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
+const actionLimitMiddleware = require('../middleware/actionLimitMiddleware');
 const shiftsService = require('../services/shiftsService');
 
 const router = express.Router();
 
-router.get('/', authMiddleware.verifyToken, async (req, res) => {
+router.get('/', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const shifts = await shiftsService.getAllShifts();
         res.json(shifts);
@@ -13,7 +14,7 @@ router.get('/', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.get('/:id', authMiddleware.verifyToken, async (req, res) => {
+router.get('/:id', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const shift = await shiftsService.getShiftById(req.params.id);
         res.json(shift);
@@ -23,7 +24,7 @@ router.get('/:id', authMiddleware.verifyToken, async (req, res) => {
 });
 
 ///////////////////// Might delete later /////////////////////
-router.get('/employee/:employeeId', authMiddleware.verifyToken, async (req, res) => {
+router.get('/employee/:employeeId', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const shifts = await shiftsService.getShiftsByEmployeeId(req.params.employeeId);
         res.json(shifts);
@@ -32,7 +33,7 @@ router.get('/employee/:employeeId', authMiddleware.verifyToken, async (req, res)
     }
 });
 
-router.post('/', authMiddleware.verifyToken, async (req, res) => {
+router.post('/', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const newShift = await shiftsService.createShift(req.body);
         res.status(201).json(newShift);
@@ -41,7 +42,7 @@ router.post('/', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.put('/:id', authMiddleware.verifyToken, async (req, res) => {
+router.put('/:id', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const updatedShift = await shiftsService.updateShift(req.params.id, req.body);
         res.status(200).json(updatedShift);
@@ -50,7 +51,7 @@ router.put('/:id', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.patch('/:id/hours', authMiddleware.verifyToken, async (req, res) => {
+router.patch('/:id/hours', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const { startHour, endHour } = req.body;
         const updatedShift = await shiftsService.changeShiftHours(req.params.id, startHour, endHour);
@@ -60,7 +61,7 @@ router.patch('/:id/hours', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.patch('/:id/employees', authMiddleware.verifyToken, async (req, res) => {
+router.patch('/:id/employees', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const { employeeIds } = req.body;
         const updatedShift = await shiftsService.addEmployeesToShift(req.params.id, employeeIds);
@@ -70,7 +71,7 @@ router.patch('/:id/employees', authMiddleware.verifyToken, async (req, res) => {
     }
 });
 
-router.delete('/:id/employees/:employeeId', authMiddleware.verifyToken, async (req, res) => {
+router.delete('/:id/employees/:employeeId', authMiddleware.verifyToken, actionLimitMiddleware.checkActionLimit, async (req, res) => {
     try {
         const updatedShift = await shiftsService.removeEmployeeFromShift(req.params.id, req.params.employeeId);
         res.status(200).json(updatedShift);
