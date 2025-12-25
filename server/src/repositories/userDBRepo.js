@@ -45,16 +45,14 @@ const checkAndResetActions = async (username) => {
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const lastReset = new Date(user.lastResetDate || new Date(0));
+        const lastReset = new Date(user.lastResetDate);
         lastReset.setHours(0, 0, 0, 0);
 
         if (lastReset < today) {
-            user.remainingActions = user.numOfActions || 10;
-            user.lastResetDate = today;
-            await user.save();
-        } else if (user.remainingActions === undefined) {
-            user.remainingActions = user.numOfActions || 10;
-            await user.save();
+        // Reset actions for the new day
+        user.remainingActions = user.numOfActions;
+        user.lastResetDate = today;
+        await user.save();
         }
         return user;
     } catch (error) {

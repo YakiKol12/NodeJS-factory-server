@@ -8,15 +8,16 @@ async function login(username, email) {
     const user = await usersApiRepo.findUserByNameAndEmail(username, email);
     if (!user) return null;
 
-    const dbUser = await userDBRepo.getUserByUsername(username);
+    const dbUser = await userDBRepo.checkAndResetActions(username);
+    if (!dbUser) return null;
 
     const token = jwt.sign(
-        { id: user.id, dbUser }, 
+        { username: user.username }, 
         process.env.JWT_SECRET, 
         { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
     );
 
-    return { token };
+    return { token, user: dbUser };
 }
 
 module.exports = { login };

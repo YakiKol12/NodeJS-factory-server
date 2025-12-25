@@ -3,12 +3,12 @@ const { actionsLoggingMiddleware } = require('./actionsLoggingMiddleware');
 
 const checkActionLimit = async (req, res, next) => {
     try {
-        const username = req.user.username;
+        const username = req.username;
         let user = await userDBRepo.checkAndResetActions(username);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
+        
         if (user.remainingActions > 0) {
             await userDBRepo.decrementRemainingActions(username);
             user = await userDBRepo.getUserByUsername(username);
