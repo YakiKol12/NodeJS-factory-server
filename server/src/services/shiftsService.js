@@ -64,7 +64,7 @@ const addEmployeesToShift = async (shiftId, employeeIds) => {
     for (const employeeId of employeeIds) {
         const employeeShifts = await getShiftsByEmployeeId(employeeId);
         for (const empShift of employeeShifts) {
-            if (empShift.date.getMonth() === shift.date.getMonth() && empShift.date.getDay() === shift.date.getDay()) {
+            if (empShift.date.getMonth() === shift.date.getMonth() && empShift.date.getDate() === shift.date.getDate()) {
                 throw new Error(`Employee ${employeeId} already has a shift on ${shift.date}`);
             }
         }
