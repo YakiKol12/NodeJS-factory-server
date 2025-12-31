@@ -1,19 +1,18 @@
-const e = require('express');
 const jf  = require('jsonfile');
 const path = require('path');
 
 const LOGS_FILE_PATH = path.join(__dirname, '../logs/actionLogs.json');
 
-const logAction = (userId, maxActions, remainingActions) => {
+const logAction = async (userId, maxActions, remainingActions) => {
     try {
         let logs = { actions: [] };
         try {
-            logs = jf.readFileSync(LOGS_FILE_PATH);
+            logs = await jf.readFile(LOGS_FILE_PATH);
             if (!logs.actions) {
                 logs.actions = [];
             }
         } catch (err) {
-            // File doesn't exist or is empty, use default
+            // File doesn't exist or read error, proceed with default logs
         }
 
         const newLog = {
@@ -22,9 +21,9 @@ const logAction = (userId, maxActions, remainingActions) => {
             timestamp: new Date().toISOString(),
             remainingActions
         };
-
         logs.actions.push(newLog);
-        jf.writeFileSync(LOGS_FILE_PATH, logs);
+
+        await jf.writeFile(LOGS_FILE_PATH, logs);
     } catch (error) {
         console.error('Error logging action:', error);
     }
