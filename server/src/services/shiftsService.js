@@ -19,8 +19,8 @@ const createShift = async (shiftData) => {
     const shifts = await shiftRepo.getAllShifts();
     const duplicateShift = shifts.find(shift => 
         shift.date === shiftData.date &&
-        shift.startTime === shiftData.startTime &&
-        shift.endTime === shiftData.endTime
+        shift.startHour === shiftData.startHour &&
+        shift.endHour === shiftData.endHour
     );
     if (duplicateShift) {
         throw new Error('Duplicate shift found');
@@ -33,8 +33,8 @@ const updateShift = async (id, shiftData) => {
     const duplicateShift = shifts.find(shift => 
         shift.id !== id &&
         shift.date === shiftData.date &&
-        shift.startTime === shiftData.startTime &&
-        shift.endTime === shiftData.endTime
+        shift.startHour === shiftData.startHour &&
+        shift.endHour === shiftData.endHour
     );
     if (duplicateShift) {
         throw new Error('Duplicate shift found');
