@@ -34,12 +34,6 @@ Start the server (example):
 node src/index.js
 ```
 
-If the project defines an `npm` start script, you can also run:
-
-```bash
-npm start
-```
-
 ## Configuration
 Database and environment configuration are located in `src/configs/db.js`.
 
@@ -52,9 +46,3 @@ Database and environment configuration are located in `src/configs/db.js`.
 
 ## Logging
 Action logs are written to `src/logs/actionLogs.json` by the actions logging middleware.
-
-## Contributing
-Open an issue or submit a pull request. Keep changes focused and include tests where appropriate.
-
-## License
-Add your license here.
